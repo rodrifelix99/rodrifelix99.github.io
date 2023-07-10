@@ -141,13 +141,20 @@
                     <span></span>
                 </div>
             </div>
+            <div class="bar">
+                <div class="info">
+                    <span>Flutter</span>
+                </div>
+                <div class="progress-line flutter">
+                    <span></span>
+                </div>
+            </div>
         </div>
         <div class="aboutMe">
             <p class="title">About me</p>
             <img src="img/me.jpg" />
             <p class="text">
-                Hi! I'm Felix and I was born in '99. I
-                started developing when I was about
+                Hi! I'm Felix and I started developing when I was about
                 14 and created my very first IE based
                 web browser using Visual Basic .NET
                 around that time.<br />I'm always eager to
@@ -159,6 +166,7 @@
         </div>
         <p class="title">I happily worked with these guys</p>
         <div class="brands">
+            <img class="brand" src="img/digital.png" onclick="window.location.href = 'https://www.escoladigital.com/'" />
             <img class="brand" src="img/siemens.png" onclick="window.location.href = 'https://www.siemens.com/'" />
             <img class="brand" src="img/dhl.png" onclick="window.location.href = 'https://www.dhl.com/'" />
             <img class="brand" src="img/notecloud.jpg" onclick="window.location.href = 'https://www.zinmobi.com/'" />
@@ -170,9 +178,97 @@
     <div class="three">
         <p class="title" style="margin-bottom: 50px; margin-top: 15vh;">My personal projects</p>
         <div class="dark-bg"></div>
+        <div class="card rellax2" data-rellax-speed="1" onclick="cardToggle('hoot')">
+            <img src="img/hoot.png" />
+            <span class="label">Under development</span>
+            <p class="card-title">Hoot</p>
+        </div>
+        <div class="card-over hoot">
+            <div class="outer" onclick="cardToggle('hoot')">
+                <div class="inner">
+                    <label>Back</label>
+                </div>
+            </div>
+            <img src="img/hoot.png" />
+            <span class="label">Under development</span>
+            <div class="explaining">
+                <p class="card-title">Hoot</p>
+                <img class="platform apple" src="img/apple.png" />
+                <img class="platform android" src="img/android.png" />
+                <p class="text">
+                    Created with Flutter.<br /><br />
+                    Hoot is an innovative social networking platform that introduces a unique concept of multiple feeds. Unlike traditional social networks, Hoot empowers its users to categorize their posts by creating multiple personalized feeds. This enables users to curate and organize their content based on specific interests, topics, or communities.
+                    <br /><br />
+                    One of the key features of Hoot is the ability for users to create and manage their own distinct feeds, which other users can subscribe to. This allows for a more tailored and personalized social media experience, as individuals can choose to follow specific feeds that align with their preferences and areas of interest.
+                    <br /><br />
+                    By offering the flexibility to create multiple feeds, Hoot fosters a diverse and engaging environment where users can connect with like-minded individuals and discover content that is most relevant to them. Whether it's a feed dedicated to hobbies, professional interests, or specific communities, Hoot provides a platform for users to explore and engage with a variety of content streams.
+                    <br/><br/>
+                    Currently in internal testing.
+                </p>
+            </div>
+        </div>
+        <div class="card rellax2" data-rellax-speed="1" onclick="cardToggle('dimmed')">
+            <img src="img/dimmed.png" />
+            <span class="label">Live</span>
+            <p class="card-title">Dimmed</p>
+        </div>
+        <div class="card-over dimmed">
+            <div class="outer" onclick="cardToggle('dimmed')">
+                <div class="inner">
+                    <label>Back</label>
+                </div>
+            </div>
+            <img src="img/dimmed.png" />
+            <span class="label">Live</span>
+            <div class="explaining">
+                <p class="card-title">Dimmed</p>
+                <img class="platform apple thumb" src="img/apple.png" onclick="window.location.href = 'https://apps.apple.com/us/app/dimmed-gay-chat/id6444031282'" />
+                <img class="platform android thumb" src="img/android.png" onclick="window.location.href = 'https://play.google.com/store/apps/details?id=com.dimmed.app&hl=pt&gl=US'" />
+                <p class="text">
+                    Created with IONIC and Angular.<br /><br />
+                    Dimmed is an innovative mobile app designed specifically for the LGBTQ+ community. It is the ultimate dating app that combines cutting-edge features to provide users with an exceptional dating experience.
+                    <br><br>
+                    With Dimmed, you can easily discover and connect with like-minded individuals nearby in a visually appealing grid format. Whether you're looking for meaningful relationships or casual encounters, Dimmed offers a safe and private environment for you to explore your options.
+                    <br><br>
+                    One of the standout features of Dimmed is its advanced Matchmaker. The Matchmaker analyzes your interests, values, and desires to connect you with compatible users. This personalized approach enhances your chances of finding meaningful connections and sparks genuine conversations.
+                    <br><br>
+                    Dimmed prioritizes user safety and authenticity. With the Verification feature, you can ensure that you're interacting with real individuals, helping to avoid catfishing and fostering a trustworthy community. Moreover, the app's Safety Center provides valuable resources, advice, and support to ensure a secure and positive experience for all users.
+                    <br><br>
+                    Dimmed offers a comprehensive set of filters to help you find the perfect match. Additionally, the app allows you to share your thoughts and experiences with the world through Dims, which are posts visible to users in your vicinity.
+                </p>
+            </div>
+        </div>
+        <div class="card rellax2" data-rellax-speed="1" onclick="cardToggle('otaku')">
+            <img src="img/otaku.png" />
+            <span class="label">Live</span>
+            <p class="card-title">Otaku</p>
+        </div>
+        <div class="card-over otaku">
+            <div class="outer" onclick="cardToggle('otaku')">
+                <div class="inner">
+                    <label>Back</label>
+                </div>
+            </div>
+            <img src="img/otaku.png" />
+            <span class="label">Live</span>
+            <div class="explaining">
+                <p class="card-title">Otaku</p>
+                <img class="platform android thumb" src="img/android.png" onclick="window.location.href = 'https://play.google.com/store/apps/details?id=com.otaku.app&hl=pt&gl=US'" />
+                <p class="text">
+                    Created with IONIC and Angular.<br /><br />
+                    Otaku is a serverless app that allows you to keep track of your favorite anime and manga, and also discover new ones.
+                    <br><br>
+                    Otaku is feeded by the MyAnimeList API, and it doesn't require any kind of registration or login. 
+                    It keeps all your information stored locally, so you can use it offline.
+                    <br><br>
+                    You can keep track where you left off, and also see the next episode release date. 
+                    You can also check which episodes are fillers, and which ones are canon.
+                </p>
+            </div>
+        </div>
         <div class="card rellax2" data-rellax-speed="1" onclick="cardToggle('nonic')">
             <img src="img/nonic.png" />
-            <span class="label">In development</span>
+            <span class="label">Requires mainentance</span>
             <p class="card-title">NONIC</p>
         </div>
         <div class="card-over nonic">
@@ -182,12 +278,13 @@
                 </div>
             </div>
             <img src="img/nonic.png" />
-            <span class="label">In development</span>
+            <span class="label">Requires mainentance</span>
             <div class="explaining">
                 <p class="card-title">NONIC</p>
                 <img class="platform apple" src="img/apple.png" />
-                <img class="platform android" src="img/android.png" />
+                <img class="platform android thumb" src="img/android.png" onclick="window.location.href = 'https://play.google.com/store/apps/details?id=no.nonicnetwork.nonic&hl=pt&gl=US'" />
                 <p class="text">
+                    Created with IONIC and Angular.<br /><br />
                     <b>What is NONIC?</b><br />
                     NONIC is an Android and iOS app that helps you connect to people around you using the magic of
                     questioning.<br />
@@ -200,14 +297,12 @@
                     We filter the questions people ask you so you only have to worry about answering the most
                     relevant
                     questions.
-                    <br /><br />
-                    Due to release this summer for Android and iOS devices.
                 </p>
             </div>
         </div>
         <div class="card rellax2" data-rellax-speed="2" onclick="cardToggle('skyvee')">
             <img src="img/skyvee/card.png" />
-            <span class="label">Finished project</span>
+            <span class="label">Available for community forks</span>
             <p class="card-title">Skyvee</p>
         </div>
         <div class="card-over skyvee">
@@ -217,7 +312,7 @@
                 </div>
             </div>
             <img src="img/skyvee/card.png" />
-            <span class="label">Finished project</span>
+            <span class="label">Archived</span>
             <span class="label github" onclick="window.location.href = 'https://github.com/rodrifelix99/SkyveeOS'">Check
                 it on
                 GitHub</span>
@@ -227,6 +322,7 @@
                 <img class="platform android" src="img/windows.png" />
                 <img class="platform linux" src="img/linux.png" />
                 <p class="text">
+                    Created with Electron.<br /><br />
                     <b>A lightweight virtual desktop that is based on web apps.</b> Nowadays every app has its own
                     web app
                     version that cuts processing and space needs by more than half! With the power of Skyvee, the
@@ -246,7 +342,7 @@
         </div>
         <div class="card rellax2" data-rellax-speed="2" onclick="cardToggle('getcool')">
             <img src="img/getcool.png" />
-            <span class="label">Finished project</span>
+            <span class="label">Archived</span>
             <p class="card-title">GetCool</p>
         </div>
         <div class="card-over getcool">
@@ -256,13 +352,14 @@
                 </div>
             </div>
             <img src="img/getcool.png" />
-            <span class="label">Finished project</span>
+            <span class="label">Archived</span>
             <div class="explaining">
                 <p class="card-title">GetCool</p>
                 <img class="platform apple" src="img/apple.png" />
                 <img class="platform android" src="img/android.png" />
                 <img class="platform linux" src="img/web.png" />
                 <p class="text">
+                    Created with HTML, CSS, JavaScript, PHP and MySQL.<br /><br />
                     GetCool was a mobile webapp where people could sign up for free and share their thoughts without
                     names or pictures.
                 </p>
@@ -270,7 +367,7 @@
         </div>
         <div class="card rellax2" data-rellax-speed="2" onclick="cardToggle('skyvee24')">
             <img src="img/skyvee24.jpg" />
-            <span class="label">Finished project</span>
+            <span class="label">Archived</span>
             <p class="card-title">Skyvee24</p>
         </div>
         <div class="card-over skyvee24">
@@ -280,13 +377,14 @@
                 </div>
             </div>
             <img src="img/skyvee24.jpg" />
-            <span class="label">Finished project</span>
+            <span class="label">Archived</span>
             <div class="explaining">
                 <p class="card-title">Skyvee24</p>
                 <img class="platform apple" src="img/apple.png" />
                 <img class="platform android" src="img/android.png" />
                 <img class="platform linux" src="img/web.png" />
                 <p class="text">
+                    Created with HTML, CSS, JavaScript, PHP and MySQL.<br /><br />
                     Social network that combines interests with virtual rooms. Makes it easier to bring people
                     together.
                 </p>
@@ -294,7 +392,7 @@
         </div>
         <div class="card rellax2" data-rellax-speed="2" onclick="cardToggle('buddy')">
             <img src="img/buddy.png" />
-            <span class="label">Finished project</span>
+            <span class="label">Archived</span>
             <p class="card-title">Buddy</p>
         </div>
         <div class="card-over buddy">
@@ -304,13 +402,14 @@
                 </div>
             </div>
             <img src="img/buddy.png" />
-            <span class="label">Finished project</span>
+            <span class="label">Archived</span>
             <div class="explaining">
                 <p class="card-title">Buddy</p>
                 <img class="platform apple" src="img/apple.png" />
                 <img class="platform android" src="img/android.png" />
                 <img class="platform linux" src="img/web.png" />
                 <p class="text">
+                    Created with HTML, CSS, JavaScript, PHP and MySQL.<br /><br />
                     Network that connects people from different cultures to show the best of both sides.
                 </p>
             </div>

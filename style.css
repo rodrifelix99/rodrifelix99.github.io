@@ -708,6 +708,10 @@ p.title {
     width: 60%;
 }
 
+.bar .progress-line.flutter span {
+    width: 65%;
+}
+
 .progress-line span::before {
     position: absolute;
     content: "";
@@ -901,10 +905,20 @@ div.explaining p.card-title {
 div.card-over img.platform {
     float: right;
     margin-top: -40px;
+    padding: 5px;
     width: 20px;
     height: 20px;
     object-fit: contain;
     opacity: 0.8;
+}
+
+div.card-over img.thumb {
+    cursor: pointer;
+}
+
+div.card-over img.thumb:hover {
+    border-radius: 5px;
+    background-color: #CCC;
 }
 
 div.card-over img.apple {
