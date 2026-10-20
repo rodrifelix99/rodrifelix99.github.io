@@ -1,0 +1,293 @@
+---
+import '@fontsource-variable/geist';
+import '@fontsource-variable/geist-mono';
+import '@fontsource/instrument-serif/400.css';
+import '@fontsource/instrument-serif/400-italic.css';
+import '../styles/site.css';
+import {
+  route, windowFor, byId, jobById, picks, rest, jobs, contact, skills, eras,
+  type Project, type PlacedStop,
+} from '../data/site';
+
+const { stops, legs, total } = route();
+const stopOf: Record<string, string> = {};
+for (const s of stops) for (const p of s.projects ?? []) stopOf[p] = s.id;
+
+// Every project stands in the city as a beacon, at the stop where it appears.
+const beacons = stops.flatMap((s) => (s.projects ?? []).map((id) => ({ p: byId[id], stop: s })));
+
+const heroWindow = `0 ${(stops[0].t1 / total).toFixed(4)} 0 0.5`;
+const firstStopOfLeg = (legId: string) => stops.find((s) => s.era === legId)!.id;
+
+const routeData = {
+  total,
+  legs,
+  stops: stops.map(({ id, kind, t, t0, t1, w, side, era, projects }) => ({ id, kind, t, t0, t1, w, side, era, projects })),
+};
+
+const arrow = '<svg class="arr" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>';
+
+const filters = [
+  { id: 'all', label: 'All' },
+  { id: 'rel', label: 'Released' },
+  { id: 'prog', label: 'In progress' },
+  { id: 'ai', label: 'AI' },
+  { id: 'game', label: 'Games' },
+  { id: 'acad', label: 'Academic' },
+  { id: 'legacy', label: 'Legacy' },
+];
+const filterTest = (p: Project, id: string) =>
+  id === 'all' ? true : id === 'prog' ? p.tags.includes('prog') || p.tags.includes('proto') : p.tags.includes(id as never);
+
+const sideClass = (s: PlacedStop) => (s.side === 'trail' ? 'at-trail' : 'at-lead');
+const year = new Date().getFullYear();
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Rodrigo Felix · Software engineer in Lisbon</title>
+  <meta name="description" content="Rodrigo Felix is a software engineer in Lisbon. He builds a production Flutter app at Lyzer and ships his own products, including Arcana, Dimmed and NONIC Network." />
+  <meta name="theme-color" content="#0A0D16" />
+  <meta property="og:title" content="Rodrigo Felix · Software engineer in Lisbon" />
+  <meta property="og:description" content="Fly back through everything he has built." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://rodrifelix99.github.io/" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <script is:inline>document.documentElement.classList.add('js');</script>
+  <link rel="stylesheet" href="/scrollcraft/scrollcraft.css" />
+</head>
+<body>
+  <a class="skip" href="#index" data-open-index>Skip to the full list of projects</a>
+
+  <header class="folio">
+    <a href="#hero" data-goto="hero" class="folio__mark">Rodrigo Felix</a>
+  </header>
+
+  <nav class="map" aria-label="Route through the years">
+    <ol class="map__legs">
+      {legs.map((l) => (
+        <li><a href={`#${firstStopOfLeg(l.id)}`} data-goto-leg={firstStopOfLeg(l.id)}>{l.label}</a></li>
+      ))}
+    </ol>
+    <span class="map__marker" aria-hidden="true"></span>
+    <p class="map__readout" aria-hidden="true" data-era-readout>2026</p>
+    <button type="button" class="map__index" data-open-index>Index</button>
+  </nav>
+
+  <main data-sc-mode="worldflight" data-sc-seam="0.16" data-sc-lerp="0.12">
+    <div data-sc-world class="world" aria-hidden="true">
+      <canvas class="city"></canvas>
+      <div class="beacons">
+        {legs.filter((l) => l.ground).map((l) => <span class="year" data-stop={firstStopOfLeg(l.id)}>{l.ground}</span>)}
+        {beacons.map(({ p, stop }) => (
+          <div class="beacon" data-id={p.id} data-stop={stop.id} data-pick={p.pick ? '1' : '0'} data-rank={p.pick ?? 0} data-glow={p.plate?.glow ?? p.tint ?? '#FFB27A'}>
+            <span class="beacon__icon">
+              {p.icon
+                ? <img src={p.icon} alt="" width="96" height="96" decoding="async" />
+                : <span class="beacon__mono" style={`--tint:${p.tint}`}>{p.name.charAt(0)}</span>}
+            </span>
+            <span class="beacon__label">{p.name}</span>
+          </div>
+        ))}
+      </div>
+      {legs.map((l) => <div data-sc-segment data-sc-w={l.w.toFixed(3)} data-sc-waypoint={l.label}></div>)}
+    </div>
+
+    <div data-sc-world-copy class="copy">
+      <div class="sc-world__scrim scrim"></div>
+
+      {stops.map((s) => {
+        if (s.kind === 'hero') return (
+          <section id="hero" class="block block--hero at-lead" data-sc-copy data-sc-window={heroWindow} data-stop="hero">
+            <p class="label">Lisbon, {year}</p>
+            <h1 class="hero__name">Rodrigo Felix</h1>
+            <p class="hero__deck">Software engineer. I build Flutter apps at Lyzer and ship my own, two of which reached the top ten of Portugal’s App Store.</p>
+          </section>
+        );
+
+        if (s.kind === 'pick') {
+          const p = byId[s.projects![0]];
+          const pl = p.plate!;
+          return (
+            <article id={s.id} class={`block block--pick ${sideClass(s)}`} data-sc-copy data-sc-window={windowFor(s, total)} data-stop={s.id}
+              style={`--bg:${pl.bg};--ink:${pl.ink}`}>
+              <figure class={`shot shot--${pl.shotKind}`}>
+                <img src={pl.shot} alt={pl.shotAlt} loading="lazy" decoding="async" />
+              </figure>
+              <div class="pick__body">
+                <p class="pick__folio"><span>{p.years}</span><span class="pick__pill">{pl.pill}</span></p>
+                <h2 class="pick__name">{p.name}</h2>
+                <p class="pick__pitch">{p.pitch}</p>
+                <p class="pick__stack">{p.stack.join(' · ')}</p>
+                {p.links && (
+                  <p class="pick__links">
+                    {p.links.map((l) => <a href={l.href} target="_blank" rel="noopener">{l.label}<Fragment set:html={arrow} /></a>)}
+                  </p>
+                )}
+              </div>
+            </article>
+          );
+        }
+
+        if (s.kind === 'log') return (
+          <section id={s.id} class={`block block--log ${sideClass(s)}`} data-sc-copy data-sc-window={windowFor(s, total)} data-stop={s.id}>
+            <h2 class="log__title">{s.title}</h2>
+            {(s.jobs ?? []).map((id) => {
+              const j = jobById[id];
+              return (
+                <div class="job">
+                  <p class="job__when">{j.when}{j.current && <span class="job__now">Current</span>}</p>
+                  <h3 class="job__org">{j.org}</h3>
+                  <p class="job__role">{j.role}</p>
+                  <p class="job__desc">{j.desc}</p>
+                </div>
+              );
+            })}
+            {s.projects && (
+              <ul class="log__list">
+                {s.projects.map((id) => {
+                  const p = byId[id];
+                  return (
+                    <li class="row">
+                      {p.icon ? <img class="row__ic" src={p.icon} alt="" width="40" height="40" loading="lazy" /> : <span class="row__ic row__ic--mono" style={`--tint:${p.tint}`} aria-hidden="true">{p.name.charAt(0)}</span>}
+                      <div class="row__text">
+                        <p class="row__head"><strong class="row__name">{p.links?.[0] ? <a href={p.links[0].href} target="_blank" rel="noopener">{p.name}</a> : p.name}</strong><span class={`st st--${p.st}`}>{p.status}</span></p>
+                        <p class="row__pitch">{p.pitch}</p>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </section>
+        );
+
+        if (s.kind === 'origin') return (
+          <section id={s.id} class={`block block--origin ${sideClass(s)}`} data-sc-copy data-sc-window={windowFor(s, total)} data-stop={s.id}>
+            <p class="label">2014</p>
+            <h2 class="origin__line">I started at fourteen with an Internet Explorer-based browser in Visual Basic .NET. <em>I never stopped shipping.</em></h2>
+            <p class="origin__also">Also from the early years: <strong>Skyvee24</strong>, a social network built around interests and virtual rooms, and <strong>Buddy</strong>, a network connecting people from different cultures. Both in PHP and MySQL.</p>
+          </section>
+        );
+
+        if (s.kind === 'finale') return (
+          <section id="finale" class="block block--finale" data-sc-copy data-sc-window="finale" data-stop="finale">
+            <h2 class="finale__line">Got an idea? Let’s ship it.</h2>
+            <a class="finale__mail" href={`mailto:${contact.email}`}>{contact.email}</a>
+            <p class="finale__social">
+              {contact.social.map((l) => <a href={l.href} target="_blank" rel="noopener">{l.label}</a>)}
+              <button type="button" class="finale__index" data-open-index>Index</button>
+            </p>
+            <p class="finale__foot">© {year} Rodrigo Felix · Lisbon, Portugal</p>
+          </section>
+        );
+        return null;
+      })}
+    </div>
+
+    <div data-sc-spacer aria-hidden="true"></div>
+  </main>
+
+  <dialog id="index" class="ix" aria-labelledby="ix-title">
+    <div class="ix__inner">
+      <header class="ix__head">
+        <h2 id="ix-title">Index</h2>
+        <button type="button" class="ix__close" data-close-index aria-label="Close the index">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </header>
+
+      <section class="ix__sec" aria-labelledby="ix-route">
+        <h3 id="ix-route" class="ix__h">The route</h3>
+        <p class="ix__route">
+          {legs.map((l) => <button type="button" data-goto={firstStopOfLeg(l.id)}>{l.label}</button>)}
+        </p>
+      </section>
+
+      <section class="ix__sec" aria-labelledby="ix-picks">
+        <h3 id="ix-picks" class="ix__h">Selected work, ranked by reach and depth</h3>
+        <ol class="ix__rows">
+          {picks.map((p) => (
+            <li class="ix__row">
+              {p.icon ? <img class="row__ic" src={p.icon} alt="" width="48" height="48" loading="lazy" /> : <span class="row__ic row__ic--mono" style={`--tint:${p.tint}`} aria-hidden="true">{p.name.charAt(0)}</span>}
+              <div class="row__text">
+                <p class="row__head"><strong class="row__name">{p.name}</strong><span class={`st st--${p.st}`}>{p.plate?.pill}</span></p>
+                <p class="row__pitch">{p.pitch}</p>
+                <p class="row__meta">{p.years} · {p.stack.join(' · ')}</p>
+                <p class="row__links">
+                  {(p.links ?? []).map((l) => <a href={l.href} target="_blank" rel="noopener">{l.label}<Fragment set:html={arrow} /></a>)}
+                  <button type="button" class="row__fly" data-goto={stopOf[p.id]}>Fly there</button>
+                </p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section class="ix__sec" aria-labelledby="ix-rest">
+        <h3 id="ix-rest" class="ix__h">Everything else</h3>
+        <div class="ix__filters" role="group" aria-label="Filter projects">
+          {filters.map((f, i) => (
+            <button type="button" class="chip" data-filter={f.id} aria-pressed={i === 0 ? 'true' : 'false'}>
+              {f.label} <span class="chip__n">{rest.filter((p) => filterTest(p, f.id)).length}</span>
+            </button>
+          ))}
+        </div>
+        <ul class="ix__rows" data-filter-list>
+          {rest.map((p) => (
+            <li class="ix__row" data-tags={p.tags.join(' ')}>
+              {p.icon ? <img class="row__ic" src={p.icon} alt="" width="48" height="48" loading="lazy" /> : <span class="row__ic row__ic--mono" style={`--tint:${p.tint}`} aria-hidden="true">{p.name.charAt(0)}</span>}
+              <div class="row__text">
+                <p class="row__head"><strong class="row__name">{p.name}</strong><span class={`st st--${p.st}`}>{p.status}</span></p>
+                <p class="row__pitch">{p.pitch}</p>
+                <p class="row__meta">{p.years} · {p.stack.join(' · ')}</p>
+                <p class="row__links">
+                  {(p.links ?? []).map((l) => <a href={l.href} target="_blank" rel="noopener">{l.label}<Fragment set:html={arrow} /></a>)}
+                  <button type="button" class="row__fly" data-goto={stopOf[p.id]}>Fly there</button>
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="ix__sec" aria-labelledby="ix-career">
+        <h3 id="ix-career" class="ix__h">Career and education</h3>
+        <ol class="ix__jobs">
+          {jobs.map((j) => (
+            <li class="job">
+              <p class="job__when">{j.when}{j.current && <span class="job__now">Current</span>}</p>
+              <h4 class="job__org">{j.org}</h4>
+              <p class="job__role">{j.role}</p>
+              <p class="job__desc">{j.desc}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section class="ix__sec" aria-labelledby="ix-about">
+        <h3 id="ix-about" class="ix__h">About</h3>
+        <p class="ix__about">I’ve spent 4+ years building and running production apps that combine AI services with cloud infrastructure. I work end to end: backend and data flows, deployment and monitoring, and the interface people actually touch.</p>
+        <dl class="ix__skills">
+          {skills.map((g) => (<div><dt>{g.group}</dt><dd>{g.items.join(' · ')}</dd></div>))}
+        </dl>
+      </section>
+
+      <section class="ix__sec ix__contact" aria-labelledby="ix-contact">
+        <h3 id="ix-contact" class="ix__h">Get in touch</h3>
+        <p><a class="finale__mail" href={`mailto:${contact.email}`}>{contact.email}</a></p>
+        <p class="finale__social">{contact.social.map((l) => <a href={l.href} target="_blank" rel="noopener">{l.label}</a>)}</p>
+      </section>
+    </div>
+  </dialog>
+
+  <script type="application/json" id="route-data" set:html={JSON.stringify(routeData)}></script>
+  <script is:inline src="/scrollcraft/scrollcraft.js"></script>
+  <script>
+    import '../scripts/flight';
+    import '../scripts/index-dialog';
+  </script>
+</body>
+</html>
